@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Diagnostics;
 using UnityEngine;
 
 namespace UniSequenceTask
@@ -10,6 +9,17 @@ namespace UniSequenceTask
 	/// </summary>
 	public sealed class MultiTaskWithTimeLog : ISequenceTask
 	{
+		//==============================================================================
+		// デリゲート
+		//==============================================================================
+		public delegate void OnStartParentCallback( string parentName );
+
+		public delegate void OnFinishParentCallback( string parentName, float elapsedTime );
+
+		public delegate void OnStartChildCallback( string parentName, string childName );
+
+		public delegate void OnFinishChildCallback( string parentName, string childName, float elapsedTime );
+
 		//==============================================================================
 		// 変数(readonly)
 		//==============================================================================
@@ -21,9 +31,12 @@ namespace UniSequenceTask
 		private string m_name = string.Empty;
 
 		//==============================================================================
-		// プロパティ(static)
+		// イベント(static)
 		//==============================================================================
-		public static bool IsLogEnabled { get; set; } = true; // ログ出力が有効の場合 true
+		public static event OnStartParentCallback  OnStartParent;
+		public static event OnFinishParentCallback OnFinishParent;
+		public static event OnStartChildCallback   OnStartChild;
+		public static event OnFinishChildCallback  OnFinishChild;
 
 		//==============================================================================
 		// 関数
@@ -33,21 +46,22 @@ namespace UniSequenceTask
 		/// </summary>
 		public void Add( string text, Action<Action> task )
 		{
-#if ENABLE_DEBUG_LOG
-
-			m_task.Add( onEnded =>
-			{
-				Log( $"【MultiTask】「{m_name}」「{text}」開始" );
-				var startTime = Time.realtimeSinceStartup;
-				task( () =>
+			m_task.Add
+			(
+				onEnded =>
 				{
-					Log( $"【MultiTask】「{m_name}」「{text}」終了    {( Time.realtimeSinceStartup - startTime ).ToString( "0.###" ) } 秒" );
-					onEnded();
-				} );
-			} );
-#else
-			m_task.Add( text, task );
-#endif
+					OnStartChild?.Invoke( m_name, text );
+					var startTime = Time.realtimeSinceStartup;
+					task
+					(
+						() =>
+						{
+							OnFinishChild?.Invoke( m_name, text, Time.realtimeSinceStartup - startTime );
+							onEnded();
+						}
+					);
+				}
+			);
 		}
 
 		/// <summary>
@@ -55,30 +69,18 @@ namespace UniSequenceTask
 		/// </summary>
 		public void Play( string text, Action onCompleted )
 		{
-#if ENABLE_DEBUG_LOG
-
 			m_name = text;
 
-			Log( $"【MultiTask】「{m_name}」開始" );
+			OnStartParent?.Invoke( m_name );
 			var startTime = Time.realtimeSinceStartup;
-			m_task.Play( () =>
-			{
-				Log( $"【MultiTask】「{m_name}」終了    {( Time.realtimeSinceStartup - startTime ).ToString( "0.###" ) } 秒" );
-				onCompleted?.Invoke();
-			} );
-#else
-			m_task.Play( text, onCompleted );
-#endif
-		}
-
-		/// <summary>
-		/// ログ出力します
-		/// </summary>
-		[Conditional( "ENABLE_DEBUG_LOG" )]
-		private static void Log( string message )
-		{
-			if ( !IsLogEnabled ) return;
-			UnityEngine.Debug.Log( message );
+			m_task.Play
+			(
+				() =>
+				{
+					OnFinishParent?.Invoke( m_name, Time.realtimeSinceStartup - startTime );
+					onCompleted?.Invoke();
+				}
+			);
 		}
 
 		/// <summary>

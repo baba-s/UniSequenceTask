@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Diagnostics;
 
 namespace UniSequenceTask
 {
@@ -9,6 +8,13 @@ namespace UniSequenceTask
 	/// </summary>
 	public sealed class MultiTaskWithLog : ISequenceTask
 	{
+		//==============================================================================
+		// デリゲート
+		//==============================================================================
+		public delegate void OnParentCallback( string parentName );
+
+		public delegate void OnChildCallback( string parentName, string childName );
+
 		//==============================================================================
 		// 変数(readonly)
 		//==============================================================================
@@ -20,9 +26,12 @@ namespace UniSequenceTask
 		private string m_name = string.Empty;
 
 		//==============================================================================
-		// プロパティ(static)
+		// イベント(static)
 		//==============================================================================
-		public static bool IsLogEnabled { get; set; } = true; // ログ出力が有効の場合 true
+		public static event OnParentCallback OnStartParent;
+		public static event OnParentCallback OnFinishParent;
+		public static event OnChildCallback  OnStartChild;
+		public static event OnChildCallback  OnFinishChild;
 
 		//==============================================================================
 		// 関数
@@ -32,20 +41,21 @@ namespace UniSequenceTask
 		/// </summary>
 		public void Add( string text, Action<Action> task )
 		{
-#if ENABLE_DEBUG_LOG
-
-			m_task.Add( onEnded =>
-			{
-				Log( $"【MultiTask】「{m_name}」「{text}」開始" );
-				task( () =>
+			m_task.Add
+			(
+				onNext =>
 				{
-					Log( $"【MultiTask】「{m_name}」「{text}」終了" );
-					onEnded();
-				} );
-			} );
-#else
-			m_task.Add( text, task );
-#endif
+					OnStartChild?.Invoke( m_name, text );
+					task
+					(
+						() =>
+						{
+							OnFinishChild?.Invoke( m_name, text );
+							onNext();
+						}
+					);
+				}
+			);
 		}
 
 		/// <summary>
@@ -53,29 +63,17 @@ namespace UniSequenceTask
 		/// </summary>
 		public void Play( string text, Action onCompleted )
 		{
-#if ENABLE_DEBUG_LOG
-
 			m_name = text;
 
-			Log( $"【MultiTask】「{m_name}」開始" );
-			m_task.Play( () =>
-			{
-				Log( $"【MultiTask】「{m_name}」終了" );
-				onCompleted?.Invoke();
-			} );
-#else
-			m_task.Play( text, onCompleted );
-#endif
-		}
-
-		/// <summary>
-		/// ログ出力します
-		/// </summary>
-		[Conditional( "ENABLE_DEBUG_LOG" )]
-		private static void Log( string message )
-		{
-			if ( !IsLogEnabled ) return;
-			UnityEngine.Debug.Log( message );
+			OnStartParent?.Invoke( m_name );
+			m_task.Play
+			(
+				() =>
+				{
+					OnFinishParent?.Invoke( m_name );
+					onCompleted?.Invoke();
+				}
+			);
 		}
 
 		/// <summary>
