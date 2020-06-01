@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 
-namespace UniSequenceTask
+namespace Kogane
 {
 	/// <summary>
 	/// ログ出力機能付きの MultiTask を管理するクラス

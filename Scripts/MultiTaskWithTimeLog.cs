@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace UniSequenceTask
+namespace Kogane
 {
 	/// <summary>
 	/// 処理時間のログ出力機能付きの MultiTask を管理するクラス

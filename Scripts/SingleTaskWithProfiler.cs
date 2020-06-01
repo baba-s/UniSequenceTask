@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections;
+using Kogane.Internal;
 using UnityEngine;
 
-namespace UniSequenceTask
+namespace Kogane
 {
 	/// <summary>
 	/// 処理時間や GC 発生回数のログ出力機能付きの SingleTask を管理するクラス

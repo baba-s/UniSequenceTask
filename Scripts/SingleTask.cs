@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace UniSequenceTask
+namespace Kogane
 {
 	/// <summary>
 	/// 直列でタスクを管理するクラス

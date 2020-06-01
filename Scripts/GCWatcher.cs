@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UniSequenceTask
+namespace Kogane.Internal
 {
 	/// <summary>
 	/// GC が何回発生したか計測するクラス

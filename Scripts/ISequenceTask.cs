@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 
-namespace UniSequenceTask
+namespace Kogane
 {
 	/// <summary>
 	/// タスクのインターフェイス

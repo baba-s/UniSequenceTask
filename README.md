@@ -1,11 +1,11 @@
-# Uni Sequence Task
+﻿# Uni Sequence Task
 
 ## Example
 
 ```cs
+using Kogane;
 using System;
 using System.Collections;
-using UniSequenceTask;
 using UnityEngine;
 
 public class Example : MonoBehaviour
