@@ -1,5 +1,7 @@
 ﻿# Uni Sequence Task
 
+コールバックの直列実行・並列実行が可能なクラス
+
 ## Example
 
 ```cs
@@ -12,6 +14,7 @@ public class Example : MonoBehaviour
 {
     private void Start()
     {
+        // ログ出力のイベント登録
         SingleTaskWithLog.OnStartParent  += parentName => Debug.Log( $"[SingleTask]「{parentName}」開始" );
         SingleTaskWithLog.OnFinishParent += parentName => Debug.Log( $"[SingleTask]「{parentName}」終了" );
         SingleTaskWithLog.OnStartChild   += ( parentName, childName ) => Debug.Log( $"[SingleTask]「{parentName}」「{childName}」開始" );
@@ -47,98 +50,106 @@ public class Example : MonoBehaviour
     {
         if ( Input.GetKeyDown( KeyCode.Alpha1 ) )
         {
-            var task1 = new SingleTask
+            // 直列実行
+            var task = new SingleTask
             {
-                { "Call 1", onEnded => StartCoroutine( Call( 0.3f, onEnded ) ) },
-                { "Call 2", onEnded => StartCoroutine( Call( 0.1f, onEnded ) ) },
-                { "Call 3", onEnded => StartCoroutine( Call( 0.0f, onEnded ) ) },
-                { "Call 4", onEnded => StartCoroutine( Call( 0.2f, onEnded ) ) },
+                onNext => StartCoroutine( Call( 0.3f, onNext ) ),
+                onNext => StartCoroutine( Call( 0.1f, onNext ) ),
+                onNext => StartCoroutine( Call( 0.0f, onNext ) ),
+                onNext => StartCoroutine( Call( 0.2f, onNext ) ),
             };
-            task1.Play( "ピカチュウ" );
+            task.Play( () => Debug.Log( "完了" ) );
         }
 
         if ( Input.GetKeyDown( KeyCode.Alpha2 ) )
         {
-            var task2 = new SingleTaskWithLog
+            // 直列実行（開始終了のログ出力付き）
+            var task = new SingleTaskWithLog
             {
-                { "Call 1", onEnded => StartCoroutine( Call( 0.3f, onEnded ) ) },
-                { "Call 2", onEnded => StartCoroutine( Call( 0.1f, onEnded ) ) },
-                { "Call 3", onEnded => StartCoroutine( Call( 0.0f, onEnded ) ) },
-                { "Call 4", onEnded => StartCoroutine( Call( 0.2f, onEnded ) ) },
+                { "Call 1", onNext => StartCoroutine( Call( 0.3f, onNext ) ) },
+                { "Call 2", onNext => StartCoroutine( Call( 0.1f, onNext ) ) },
+                { "Call 3", onNext => StartCoroutine( Call( 0.0f, onNext ) ) },
+                { "Call 4", onNext => StartCoroutine( Call( 0.2f, onNext ) ) },
             };
-            task2.Play( "ピカチュウ" );
+            task.Play( "ピカチュウ", () => Debug.Log( "完了" ) );
         }
 
         if ( Input.GetKeyDown( KeyCode.Alpha3 ) )
         {
-            var task3 = new SingleTaskWithTimeLog
+            // 直列実行（経過時間のログ出力付き）
+            var task = new SingleTaskWithTimeLog
             {
-                { "Call 1", onEnded => StartCoroutine( Call( 0.3f, onEnded ) ) },
-                { "Call 2", onEnded => StartCoroutine( Call( 0.1f, onEnded ) ) },
-                { "Call 3", onEnded => StartCoroutine( Call( 0.0f, onEnded ) ) },
-                { "Call 4", onEnded => StartCoroutine( Call( 0.2f, onEnded ) ) },
+                { "Call 1", onNext => StartCoroutine( Call( 0.3f, onNext ) ) },
+                { "Call 2", onNext => StartCoroutine( Call( 0.1f, onNext ) ) },
+                { "Call 3", onNext => StartCoroutine( Call( 0.0f, onNext ) ) },
+                { "Call 4", onNext => StartCoroutine( Call( 0.2f, onNext ) ) },
             };
-            task3.Play( "ピカチュウ" );
+            task.Play( "ピカチュウ", () => Debug.Log( "完了" ) );
         }
 
         if ( Input.GetKeyDown( KeyCode.Alpha4 ) )
         {
-            var task4 = new SingleTaskWithProfiler
+            // 直列実行（GC 発生回数のログ出力付き）
+            var task = new SingleTaskWithProfiler
             {
-                { "Call 1", onEnded => StartCoroutine( Call( 0.3f, onEnded ) ) },
-                { "Call 2", onEnded => StartCoroutine( Call( 0.1f, onEnded ) ) },
-                { "Call 3", onEnded => StartCoroutine( Call( 0.0f, onEnded ) ) },
-                { "Call 4", onEnded => StartCoroutine( Call( 0.2f, onEnded ) ) },
+                { "Call 1", onNext => StartCoroutine( Call( 0.3f, onNext ) ) },
+                { "Call 2", onNext => StartCoroutine( Call( 0.1f, onNext ) ) },
+                { "Call 3", onNext => StartCoroutine( Call( 0.0f, onNext ) ) },
+                { "Call 4", onNext => StartCoroutine( Call( 0.2f, onNext ) ) },
             };
-            task4.Play( "ピカチュウ" );
+            task.Play( "ピカチュウ", () => Debug.Log( "完了" ) );
         }
 
         if ( Input.GetKeyDown( KeyCode.Alpha5 ) )
         {
-            var task5 = new MultiTask
+            // 並列実行
+            var task = new MultiTask
             {
-                { "Call 1", onEnded => StartCoroutine( Call( 0.3f, onEnded ) ) },
-                { "Call 2", onEnded => StartCoroutine( Call( 0.1f, onEnded ) ) },
-                { "Call 3", onEnded => StartCoroutine( Call( 0.0f, onEnded ) ) },
-                { "Call 4", onEnded => StartCoroutine( Call( 0.2f, onEnded ) ) },
+                onNext => StartCoroutine( Call( 0.3f, onNext ) ),
+                onNext => StartCoroutine( Call( 0.1f, onNext ) ),
+                onNext => StartCoroutine( Call( 0.0f, onNext ) ),
+                onNext => StartCoroutine( Call( 0.2f, onNext ) ),
             };
-            task5.Play( "ピカチュウ" );
+            task.Play( () => Debug.Log( "完了" ) );
         }
 
         if ( Input.GetKeyDown( KeyCode.Alpha6 ) )
         {
-            var task6 = new MultiTaskWithLog
+            // 並列実行（開始終了のログ出力付き）
+            var task = new MultiTaskWithLog
             {
-                { "Call 1", onEnded => StartCoroutine( Call( 0.3f, onEnded ) ) },
-                { "Call 2", onEnded => StartCoroutine( Call( 0.1f, onEnded ) ) },
-                { "Call 3", onEnded => StartCoroutine( Call( 0.0f, onEnded ) ) },
-                { "Call 4", onEnded => StartCoroutine( Call( 0.2f, onEnded ) ) },
+                { "Call 1", onNext => StartCoroutine( Call( 0.3f, onNext ) ) },
+                { "Call 2", onNext => StartCoroutine( Call( 0.1f, onNext ) ) },
+                { "Call 3", onNext => StartCoroutine( Call( 0.0f, onNext ) ) },
+                { "Call 4", onNext => StartCoroutine( Call( 0.2f, onNext ) ) },
             };
-            task6.Play( "ピカチュウ" );
+            task.Play( "ピカチュウ", () => Debug.Log( "完了" ) );
         }
 
         if ( Input.GetKeyDown( KeyCode.Alpha7 ) )
         {
-            var task7 = new MultiTaskWithTimeLog
+            // 並列実行（経過時間のログ出力付き）
+            var task = new MultiTaskWithTimeLog
             {
-                { "Call 1", onEnded => StartCoroutine( Call( 0.3f, onEnded ) ) },
-                { "Call 2", onEnded => StartCoroutine( Call( 0.1f, onEnded ) ) },
-                { "Call 3", onEnded => StartCoroutine( Call( 0.0f, onEnded ) ) },
-                { "Call 4", onEnded => StartCoroutine( Call( 0.2f, onEnded ) ) },
+                { "Call 1", onNext => StartCoroutine( Call( 0.3f, onNext ) ) },
+                { "Call 2", onNext => StartCoroutine( Call( 0.1f, onNext ) ) },
+                { "Call 3", onNext => StartCoroutine( Call( 0.0f, onNext ) ) },
+                { "Call 4", onNext => StartCoroutine( Call( 0.2f, onNext ) ) },
             };
-            task7.Play( "ピカチュウ" );
+            task.Play( "ピカチュウ", () => Debug.Log( "完了" ) );
         }
 
         if ( Input.GetKeyDown( KeyCode.Alpha8 ) )
         {
-            var task8 = new MultiTaskWithProfiler
+            // 並列実行（GC 発生回数のログ出力付き）
+            var task = new MultiTaskWithProfiler
             {
-                { "Call 1", onEnded => StartCoroutine( Call( 0.3f, onEnded ) ) },
-                { "Call 2", onEnded => StartCoroutine( Call( 0.1f, onEnded ) ) },
-                { "Call 3", onEnded => StartCoroutine( Call( 0.0f, onEnded ) ) },
-                { "Call 4", onEnded => StartCoroutine( Call( 0.2f, onEnded ) ) },
+                { "Call 1", onNext => StartCoroutine( Call( 0.3f, onNext ) ) },
+                { "Call 2", onNext => StartCoroutine( Call( 0.1f, onNext ) ) },
+                { "Call 3", onNext => StartCoroutine( Call( 0.0f, onNext ) ) },
+                { "Call 4", onNext => StartCoroutine( Call( 0.2f, onNext ) ) },
             };
-            task8.Play( "ピカチュウ" );
+            task.Play( "ピカチュウ", () => Debug.Log( "完了" ) );
         }
     }
 
