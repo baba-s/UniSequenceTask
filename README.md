@@ -15,35 +15,35 @@ public class Example : MonoBehaviour
     private void Start()
     {
         // ログ出力のイベント登録
-        SingleTaskWithLog.OnStartParent  += parentName => Debug.Log( $"[SingleTask]「{parentName}」開始" );
-        SingleTaskWithLog.OnFinishParent += parentName => Debug.Log( $"[SingleTask]「{parentName}」終了" );
-        SingleTaskWithLog.OnStartChild   += ( parentName, childName ) => Debug.Log( $"[SingleTask]「{parentName}」「{childName}」開始" );
-        SingleTaskWithLog.OnFinishChild  += ( parentName, childName ) => Debug.Log( $"[SingleTask]「{parentName}」「{childName}」終了" );
+        SingleTaskWithLog.OnStartParent  = parentName => Debug.Log( $"[SingleTask]「{parentName}」開始" );
+        SingleTaskWithLog.OnFinishParent = parentName => Debug.Log( $"[SingleTask]「{parentName}」終了" );
+        SingleTaskWithLog.OnStartChild   = ( parentName, childName ) => Debug.Log( $"[SingleTask]「{parentName}」「{childName}」開始" );
+        SingleTaskWithLog.OnFinishChild  = ( parentName, childName ) => Debug.Log( $"[SingleTask]「{parentName}」「{childName}」終了" );
 
-        SingleTaskWithTimeLog.OnStartParent  += parentName => Debug.Log( $"[SingleTask]「{parentName}」開始" );
-        SingleTaskWithTimeLog.OnFinishParent += ( parentName, elapsedTime ) => Debug.Log( $"[SingleTask]「{parentName}」終了    {elapsedTime:0.00} 秒" );
-        SingleTaskWithTimeLog.OnStartChild   += ( parentName, childName ) => Debug.Log( $"[SingleTask]「{parentName}」「{childName}」開始" );
-        SingleTaskWithTimeLog.OnFinishChild  += ( parentName, childName, elapsedTime ) => Debug.Log( $"[SingleTask]「{parentName}」「{childName}」終了    {elapsedTime:0.00} 秒" );
+        SingleTaskWithTimeLog.OnStartParent  = parentName => Debug.Log( $"[SingleTask]「{parentName}」開始" );
+        SingleTaskWithTimeLog.OnFinishParent = ( parentName, elapsedTime ) => Debug.Log( $"[SingleTask]「{parentName}」終了    {elapsedTime:0.00} 秒" );
+        SingleTaskWithTimeLog.OnStartChild   = ( parentName, childName ) => Debug.Log( $"[SingleTask]「{parentName}」「{childName}」開始" );
+        SingleTaskWithTimeLog.OnFinishChild  = ( parentName, childName, elapsedTime ) => Debug.Log( $"[SingleTask]「{parentName}」「{childName}」終了    {elapsedTime:0.00} 秒" );
 
-        SingleTaskWithProfiler.OnStartParent  += parentName => Debug.Log( $"[SingleTask]「{parentName}」開始" );
-        SingleTaskWithProfiler.OnFinishParent += ( parentName, elapsedTime, gcCount ) => Debug.Log( $"[SingleTask]「{parentName}」終了    {elapsedTime:0.00} 秒    GC {gcCount} 回" );
-        SingleTaskWithProfiler.OnStartChild   += ( parentName, childName ) => Debug.Log( $"[SingleTask]「{parentName}」「{childName}」開始" );
-        SingleTaskWithProfiler.OnFinishChild  += ( parentName, childName, elapsedTime, gcCount ) => Debug.Log( $"[SingleTask]「{parentName}」「{childName}」終了    {elapsedTime:0.00} 秒    GC {gcCount} 回" );
+        SingleTaskWithProfiler.OnStartParent  = parentName => Debug.Log( $"[SingleTask]「{parentName}」開始" );
+        SingleTaskWithProfiler.OnFinishParent = ( parentName, elapsedTime, gcCount ) => Debug.Log( $"[SingleTask]「{parentName}」終了    {elapsedTime:0.00} 秒    GC {gcCount} 回" );
+        SingleTaskWithProfiler.OnStartChild   = ( parentName, childName ) => Debug.Log( $"[SingleTask]「{parentName}」「{childName}」開始" );
+        SingleTaskWithProfiler.OnFinishChild  = ( parentName, childName, elapsedTime, gcCount ) => Debug.Log( $"[SingleTask]「{parentName}」「{childName}」終了    {elapsedTime:0.00} 秒    GC {gcCount} 回" );
 
-        MultiTaskWithLog.OnStartParent  += parentName => Debug.Log( $"[MultiTask]「{parentName}」開始" );
-        MultiTaskWithLog.OnFinishParent += parentName => Debug.Log( $"[MultiTask]「{parentName}」終了" );
-        MultiTaskWithLog.OnStartChild   += ( parentName, childName ) => Debug.Log( $"[MultiTask]「{parentName}」「{childName}」開始" );
-        MultiTaskWithLog.OnFinishChild  += ( parentName, childName ) => Debug.Log( $"[MultiTask]「{parentName}」「{childName}」終了" );
+        MultiTaskWithLog.OnStartParent  = parentName => Debug.Log( $"[MultiTask]「{parentName}」開始" );
+        MultiTaskWithLog.OnFinishParent = parentName => Debug.Log( $"[MultiTask]「{parentName}」終了" );
+        MultiTaskWithLog.OnStartChild   = ( parentName, childName ) => Debug.Log( $"[MultiTask]「{parentName}」「{childName}」開始" );
+        MultiTaskWithLog.OnFinishChild  = ( parentName, childName ) => Debug.Log( $"[MultiTask]「{parentName}」「{childName}」終了" );
 
-        MultiTaskWithTimeLog.OnStartParent  += parentName => Debug.Log( $"[MultiTask]「{parentName}」開始" );
-        MultiTaskWithTimeLog.OnFinishParent += ( parentName, elapsedTime ) => Debug.Log( $"[MultiTask]「{parentName}」終了    {elapsedTime:0.00} 秒" );
-        MultiTaskWithTimeLog.OnStartChild   += ( parentName, childName ) => Debug.Log( $"[MultiTask]「{parentName}」「{childName}」開始" );
-        MultiTaskWithTimeLog.OnFinishChild  += ( parentName, childName, elapsedTime ) => Debug.Log( $"[MultiTask]「{parentName}」「{childName}」終了    {elapsedTime:0.00} 秒" );
+        MultiTaskWithTimeLog.OnStartParent  = parentName => Debug.Log( $"[MultiTask]「{parentName}」開始" );
+        MultiTaskWithTimeLog.OnFinishParent = ( parentName, elapsedTime ) => Debug.Log( $"[MultiTask]「{parentName}」終了    {elapsedTime:0.00} 秒" );
+        MultiTaskWithTimeLog.OnStartChild   = ( parentName, childName ) => Debug.Log( $"[MultiTask]「{parentName}」「{childName}」開始" );
+        MultiTaskWithTimeLog.OnFinishChild  = ( parentName, childName, elapsedTime ) => Debug.Log( $"[MultiTask]「{parentName}」「{childName}」終了    {elapsedTime:0.00} 秒" );
 
-        MultiTaskWithProfiler.OnStartParent  += parentName => Debug.Log( $"[MultiTask]「{parentName}」開始" );
-        MultiTaskWithProfiler.OnFinishParent += ( parentName, elapsedTime, gcCount ) => Debug.Log( $"[MultiTask]「{parentName}」終了    {elapsedTime:0.00} 秒    GC {gcCount} 回" );
-        MultiTaskWithProfiler.OnStartChild   += ( parentName, childName ) => Debug.Log( $"[MultiTask]「{parentName}」「{childName}」開始" );
-        MultiTaskWithProfiler.OnFinishChild  += ( parentName, childName, elapsedTime, gcCount ) => Debug.Log( $"[MultiTask]「{parentName}」「{childName}」終了    {elapsedTime:0.00} 秒    GC {gcCount} 回" );
+        MultiTaskWithProfiler.OnStartParent  = parentName => Debug.Log( $"[MultiTask]「{parentName}」開始" );
+        MultiTaskWithProfiler.OnFinishParent = ( parentName, elapsedTime, gcCount ) => Debug.Log( $"[MultiTask]「{parentName}」終了    {elapsedTime:0.00} 秒    GC {gcCount} 回" );
+        MultiTaskWithProfiler.OnStartChild   = ( parentName, childName ) => Debug.Log( $"[MultiTask]「{parentName}」「{childName}」開始" );
+        MultiTaskWithProfiler.OnFinishChild  = ( parentName, childName, elapsedTime, gcCount ) => Debug.Log( $"[MultiTask]「{parentName}」「{childName}」終了    {elapsedTime:0.00} 秒    GC {gcCount} 回" );
     }
 
     private void Update()
