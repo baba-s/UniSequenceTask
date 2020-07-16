@@ -32,12 +32,12 @@ namespace Kogane
 		private string m_name = string.Empty;
 
 		//==============================================================================
-		// イベント(static)
+		// デリゲート(static)
 		//==============================================================================
-		public static event OnStartParentCallback  OnStartParent;
-		public static event OnFinishParentCallback OnFinishParent;
-		public static event OnStartChildCallback   OnStartChild;
-		public static event OnFinishChildCallback  OnFinishChild;
+		public static OnStartParentCallback  OnStartParent	{ get; set; } = parentName => Debug.Log( $"[MultiTask]「{parentName}」開始" );
+		public static OnFinishParentCallback OnFinishParent	{ get; set; } = ( parentName, elapsedTime, gcCount ) => Debug.Log( $"[MultiTask]「{parentName}」終了    {elapsedTime:0.00} 秒    GC {gcCount} 回" );
+		public static OnStartChildCallback   OnStartChild	{ get; set; } = ( parentName, childName ) => Debug.Log( $"[MultiTask]「{parentName}」「{childName}」開始" );
+		public static OnFinishChildCallback  OnFinishChild	{ get; set; } = ( parentName, childName, elapsedTime, gcCount ) => Debug.Log( $"[MultiTask]「{parentName}」「{childName}」終了    {elapsedTime:0.00} 秒    GC {gcCount} 回" );
 
 		//==============================================================================
 		// 関数

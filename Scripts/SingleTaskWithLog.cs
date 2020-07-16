@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using UnityEngine;
 
 namespace Kogane
 {
@@ -26,12 +27,12 @@ namespace Kogane
 		private string m_name = string.Empty;
 
 		//==============================================================================
-		// イベント(static)
+		// デリゲート(static)
 		//==============================================================================
-		public static event OnParentCallback OnStartParent;
-		public static event OnParentCallback OnFinishParent;
-		public static event OnChildCallback  OnStartChild;
-		public static event OnChildCallback  OnFinishChild;
+		public static OnParentCallback OnStartParent  { get; set; } = parentName => Debug.Log( $"[SingleTask]「{parentName}」開始" );
+		public static OnParentCallback OnFinishParent { get; set; } = parentName => Debug.Log( $"[SingleTask]「{parentName}」終了" );
+		public static OnChildCallback  OnStartChild   { get; set; } = ( parentName, childName ) => Debug.Log( $"[SingleTask]「{parentName}」「{childName}」開始" );
+		public static OnChildCallback  OnFinishChild  { get; set; } = ( parentName, childName ) => Debug.Log( $"[SingleTask]「{parentName}」「{childName}」終了" );
 
 		//==============================================================================
 		// 関数
