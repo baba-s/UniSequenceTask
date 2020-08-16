@@ -13,6 +13,7 @@ namespace Kogane
 		// 変数(readonly)
 		//==============================================================================
 		private readonly List<Action<Action>> m_list = new List<Action<Action>>();
+		private readonly bool                 m_isReuse;
 
 		//==============================================================================
 		// 変数
@@ -22,6 +23,21 @@ namespace Kogane
 		//==============================================================================
 		// 関数
 		//==============================================================================
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		public SingleTask() : this( false )
+		{
+		}
+
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		public SingleTask( bool isReuse )
+		{
+			m_isReuse = isReuse;
+		}
+
 		/// <summary>
 		/// タスクを追加します
 		/// </summary>
@@ -50,7 +66,12 @@ namespace Kogane
 				if ( m_list.Count <= count )
 				{
 					m_isPlaying = false;
-					m_list.Clear();
+
+					if ( !m_isReuse )
+					{
+						m_list.Clear();
+					}
+
 					onCompleted?.Invoke();
 					return;
 				}

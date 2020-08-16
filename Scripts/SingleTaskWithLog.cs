@@ -19,7 +19,7 @@ namespace Kogane
 		//==============================================================================
 		// 変数(readonly)
 		//==============================================================================
-		private readonly SingleTask m_task = new SingleTask();
+		private readonly SingleTask m_task;
 
 		//==============================================================================
 		// 変数
@@ -37,6 +37,21 @@ namespace Kogane
 		//==============================================================================
 		// 関数
 		//==============================================================================
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		public SingleTaskWithLog() : this( false )
+		{
+		}
+
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		public SingleTaskWithLog( bool isReuse )
+		{
+			m_task = new SingleTask( isReuse );
+		}
+
 		/// <summary>
 		/// タスクを追加します
 		/// </summary>

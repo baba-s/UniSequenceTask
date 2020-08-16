@@ -24,7 +24,7 @@ namespace Kogane
 		//==============================================================================
 		// 変数(readonly)
 		//==============================================================================
-		private readonly MultiTask m_task = new MultiTask();
+		private readonly MultiTask m_task;
 
 		//==============================================================================
 		// 変数
@@ -42,6 +42,21 @@ namespace Kogane
 		//==============================================================================
 		// 関数
 		//==============================================================================
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		public MultiTaskWithProfiler() : this( false )
+		{
+		}
+
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		public MultiTaskWithProfiler( bool isReuse )
+		{
+			m_task = new MultiTask( isReuse );
+		}
+
 		/// <summary>
 		/// タスクを追加します
 		/// </summary>

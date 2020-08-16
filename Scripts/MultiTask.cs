@@ -13,6 +13,7 @@ namespace Kogane
 		// 変数(readonly)
 		//==============================================================================
 		private readonly List<Action<Action>> m_list = new List<Action<Action>>();
+		private readonly bool                 m_isReuse;
 
 		//==============================================================================
 		// 変数
@@ -22,6 +23,21 @@ namespace Kogane
 		//==============================================================================
 		// 関数
 		//==============================================================================
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		public MultiTask() : this( false )
+		{
+		}
+
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		public MultiTask( bool isReuse )
+		{
+			m_isReuse = isReuse;
+		}
+
 		/// <summary>
 		/// タスクを追加します
 		/// </summary>
@@ -49,7 +65,12 @@ namespace Kogane
 				m_list.Count, () =>
 				{
 					m_isPlaying = false;
-					m_list.Clear();
+
+					if ( !m_isReuse )
+					{
+						m_list.Clear();
+					}
+
 					onCompleted?.Invoke();
 				}
 			);
@@ -75,7 +96,12 @@ namespace Kogane
 		/// 呼び出すたびに指定した回数分まで <c>onUpdated</c> デリゲートを実行します
 		/// 指定した回数分MoveNext()を呼び出すと<c>onCompleted</c> デリゲートを実行します。
 		/// </summary>
-		private static IEnumerator CallOfCounts( int count, Action onCompleted, Action onUpdated = null )
+		private static IEnumerator CallOfCounts
+		(
+			int    count,
+			Action onCompleted,
+			Action onUpdated = null
+		)
 		{
 			onUpdated?.Invoke();
 
@@ -98,7 +124,12 @@ namespace Kogane
 		///
 		/// CallOfCountsのデリゲートのみを返す版
 		/// </summary>
-		private static Action CallOfCountsFromDelegate( int count, Action onCompleted, Action onUpdated = null )
+		private static Action CallOfCountsFromDelegate
+		(
+			int    count,
+			Action onCompleted,
+			Action onUpdated = null
+		)
 		{
 			var coroutine = CallOfCounts( count, onCompleted, onUpdated );
 			return () => coroutine.MoveNext();
